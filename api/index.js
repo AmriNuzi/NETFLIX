@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
-app.use("/api/moives", movieRoute);
+app.use("/api/movies", movieRoute);
 app.use("/api/lists", listRoute);
 
 
