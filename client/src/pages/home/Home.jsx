@@ -5,6 +5,7 @@ import List from "../../components/list/List";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { getToken } from '../../storage/';
 
 
 const Home = ({type}) => {
@@ -15,10 +16,10 @@ const Home = ({type}) => {
     const getRandomLists = async()=>{
       try {
         const res = await axios.get(
-          `lists${type ? "?type=" + type : ""}${genre ? "&genre=" + genre : ""}`,{
+          `/lists${type ? "?type=" + type : ""}${genre ? "&genre=" + genre : ""}`,{
             headers:{
               token: 
-               "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzE5NTk2ZWU4OWJhY2QzNGE5NWE1MyIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6ImFtcmkiLCJpYXQiOjE2NjIyMTMzMDcsImV4cCI6MTY2MjY0NTMwN30.DDRq4MgmO0VtoKDXngRDPIwfathcvdLx6XgKMwBFHGc"
+               "Bearer " + getToken()
             }
           }
         );

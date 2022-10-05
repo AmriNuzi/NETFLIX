@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import { getToken } from '../../storage/';
 
 export default function ListItem({index, item}) {
     const[isHovered, setIsHovered] = useState(false);
@@ -16,20 +17,19 @@ export default function ListItem({index, item}) {
   useEffect(()=>{
     const getMovie = async ()=>{
       try {
-        const res = await axios.get("/movies/fin/d" + item, {
+        const res = await axios.get("/movies/find/" + item, {
           headers:{
             token: 
-             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzE5NTk2ZWU4OWJhY2QzNGE5NWE1MyIsImlzQWRtaW4iOmZhbHNlLCJ1c2VybmFtZSI6ImFtcmkiLCJpYXQiOjE2NjIyMTMzMDcsImV4cCI6MTY2MjY0NTMwN30.DDRq4MgmO0VtoKDXngRDPIwfathcvdLx6XgKMwBFHGc"
+             "Bearer " + getToken()
           }
         });
         setMovie(res.data);
-
       } catch (err) {
         console.log(err);
       }   
     };
     getMovie()
-  },[item])
+  },[item]);
 
   return (
     <div 

@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { findByIdAndDelete } = require("../models/List");
 const List = require("../models/List");
-const Movie = require("../models/List");
 const verify = require("../verifyToken");
 
 
@@ -26,7 +25,7 @@ router.post("/", verify, async (req, res) => {
 router.delete("/:id", verify, async (req, res) => {
     if (req.user.isAdmin) {
           try{
-               await findByIdAndDelete(req.params.id);
+               await List.findByIdAndDelete(req.params.id);
               res.status(201).json("the list has been deleted");
           }catch(err){
               res.status(500).json(err);

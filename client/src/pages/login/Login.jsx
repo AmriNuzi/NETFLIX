@@ -2,6 +2,12 @@ import "./login.scss"
 
 export default function Login() {
 
+  const handleSubmit = (e) => {
+    const email = e.target.email;
+
+    // axios login. 
+    // store token in setToken()
+  }
   return (
     <div className="login">
       <div className="top">
@@ -14,7 +20,7 @@ export default function Login() {
         </div>
       </div>
       <div className="container">
-        <form>
+        <form onSubmit={handleSubmit}>
           <h1>Sign In</h1>
           <input type="email" placeholder="Email or phone number"/>
           <input type="password" placeholder="password"/>
