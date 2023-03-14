@@ -1,15 +1,40 @@
 import React, {useEffect, useState} from "react"
 import { InfoOutlined, PlayArrow } from "@material-ui/icons"
 import "./featured.scss"
+import axios from "axios"
+import "../../pages/movies/New";
+import { getToken } from '../../storage/';
 
-export default function Featured({type}) {
+export default function Featured({ type, setGenre }) {
+  const [content, setContent ] = useState({})
 
-        return (
+  const getRandomContent = async () =>{
+    try {
+      const res = await axios.get(`/movies/random/`, {
+        headers:{
+          token: 
+           "Bearer " + getToken()
+        },
+      })
+      setContent(res.data[0]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(()=>{ 
+
+    getRandomContent();
+  },[type])
+
+  return (
     <div className="featured">
         {type && (
           <div className="category">
             <span>{type === "movies" ? "Movies" : "Series"}</span>
-            <select name="genre" id="genre">
+            <select name="genre" id="genre"
+             onChange={e=>setGenre(e.target.value)}
+            >
               <option>Genre</option>
                 <option value="adventure">Adventure</option>
                 <option value="comedy">Comedy</option>
@@ -27,21 +52,19 @@ export default function Featured({type}) {
             </select>
           </div>
         )}
+        
         <img 
-        src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" 
+        src={content.img} 
         alt="" 
       />
       <div className="info">
       <img
-          src="https://occ-0-1432-1433.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABUZdeG1DrMstq-YKHZ-dA-cx2uQN_YbCYx7RABDk0y7F8ZK6nzgCz4bp5qJVgMizPbVpIvXrd4xMBQAuNe0xmuW2WjoeGMDn1cFO.webp?r=df1"
+          src={content.imgTitle}
           alt=""
         />
 
             <span className="desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam 
-              nisi nostrum, perspiciatis eveniet optio rem nobis, enim
-              reprehenderit atque neque ratione provident! 
-              Porro sit consequuntur dicta neque unde quod delectus.
+              {content.desc}
             </span>
             <div className="buttons">
               <button className="play">

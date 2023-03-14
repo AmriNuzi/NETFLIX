@@ -33,6 +33,36 @@
                 
             }
         }
+        .middle{
+            flex-direction: row;
+            display: flex;
+            justify-content:space-between;
+            
+            // padding-right: 10px;
+            .userForm{
+                padding-top: 200px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+           .movieForm{
+            padding-top: 580px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                // height: 300px;
+                // overflow-y:scroll;
+            .h2{
+                // padding: 20px;
+            }
+           }
+           .listForm{
+                padding-top: 250px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+           }
+        }
 
         .right{
             display: flex;

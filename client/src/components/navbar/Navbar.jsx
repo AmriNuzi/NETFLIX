@@ -1,15 +1,40 @@
 import { ArrowDropDown, LaptopWindows, Notifications, Search } from "@material-ui/icons"
-import { useState } from "react"
+import React, { useState } from "react"
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "./navbar.scss"
+import "./navbar.scss";
+import {setUserLogin} from '../../store/login/loginSlice';
+import { removeToken } from "../../storage";
+import { useNavigate } from 'react-router-dom';
+// import CreateMovie from "./CreateMovie";
+import { Button } from "@mui/material";
+import { ButtonBase } from "@material-ui/core";
+// import CreateUser from "./CreateUser";
+// import CreateList from "./CreateList";
+
+
+
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   window.onscroll = () =>{
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return() => (window.onscroll = null);
   }
+
+
+  const logoutUser = () =>{
+     dispatch(setUserLogin(false))
+
+     removeToken();
+     navigate('/login');
+
+  }
+
   return (
     <div className={isScrolled ? "navbar scrolled" : "navbar"}>
       <div className="container">
@@ -24,12 +49,18 @@ const Navbar = () => {
                <Link to="/series" className="link">
                 <span>Series</span>
                </Link>
-               <Link to="/movies" className="link">
+               {/* <Link to="/movies" className="link">
                 <span>Movies</span>
+               </Link> */}
+               <Link to="/movies-list" className="link">
+                <span>Movie</span>
                </Link>
-               <span>New and Popular</span>
-               <span>My List</span>
+               {/* <span>New and Popular</span>
+               <span>My List</span> */}
           </div>
+
+     
+
           <div className="right">
             <Search className="icon"/>
             <span>KID</span>
@@ -40,7 +71,7 @@ const Navbar = () => {
               <ArrowDropDown className="icon"/>
               <div className="options">
                 <span>Settings</span>
-                <span>Logout</span>
+                <span onClick={logoutUser} >Logout</span>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Movie = require("../models/Movie");
 const verify = require("../verifyToken");
+const List = require("../models/List");
 
 //Create
 
@@ -9,9 +10,17 @@ router.post("/", verify, async (req, res) => {
         const newMovie = new Movie(req.body);
         try{
             const savedMovie = await newMovie.save();
+            if (req.body.list) {
+              
+              const list = await List.findById(req.body.list);
+              const content = list.content;
+              content.push(savedMovie.id);
+              const doc = await List.findByIdAndUpdate(req.body.list, { content: content }, { new: true }) 
+            }
             res.status(201).json(savedMovie);
         }catch(err){
-            res.status(500).json(err);
+          console.log(err);
+          res.status(500).json(err);
         }
     } else {
     res.status(403).json("You are not allowed movie!");
@@ -57,40 +66,27 @@ router.delete("/:id", verify, async (req, res) => {
   });
 
 
-//Get
-router.get("/find/:id", verify, async (req, res) =>{
-    try {
-        const movie = await Movie.findById(req.params.id);
-        res.status(200).json(movie);
-    } catch (err){ 
-        res.status(500).json(err);
-    }
-});
-//Get random
-router.get("/random", verify, async (req, res) => {
-    const type = req.query.type; 
+  router.get("/random", verify, async (req, res) => {
+    const type = req.query.type;
     let movie;
-    try{
-        if(type === "series"){
-            movie = await Movie.aggregate([
-                { $match: {$isSeries: true} },
-                { $sample: { size: 1} },
-            ]);
-        } else {
-            movie = await Movie.aggregate([
-                { $match: {$isSeries: false} },
-                { $sample: { size: 1} },
-            ]);
-        }
-        res.status
-      const movie = await Movie.findById(req.params.id);
-      res.status(200).json(movie);
-      } catch (err) {
-          res.status(500).json(err);
+    try {
+      if (type === "series") {
+        movie = await Movie.aggregate([
+          { $match: { isSeries: true } },
+          { $sample: { size: 1 } },
+        ]);
+      } else {
+        movie = await Movie.aggregate([
+          { $match: { isSeries: false } },
+          { $sample: { size: 1 } },
+        ]);
       }
+      res.status(200).json(movie);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
-
-
+  
 //Get All
 
 router.get("/", verify, async (req, res) => {
@@ -105,4 +101,17 @@ router.get("/", verify, async (req, res) => {
       res.status(403).json("You are not allowed !");
     }
   });
+
+  
+//Get
+router.get("/:id", verify, async (req, res) =>{
+    try {
+        const movie = await Movie.findById(req.params.id);
+        res.status(200).json(movie);
+    } catch (err){ 
+        res.status(500).json(err);
+    }
+});
+
+
 module.exports = router;
