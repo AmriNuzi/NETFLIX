@@ -1,15 +1,11 @@
-import "./listItem.scss";
-import {
-  PlayArrow,
-  Add,
-  ThumbUpOutlined,
-  ThumbDownOutlined, 
-} from "@material-ui/icons";
+
+import { PlayArrow, Add, ThumbUpOutlined, ThumbDownOutlined, } from "@material-ui/icons";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { getToken } from '../../storage/';
 import { Link } from "react-router-dom";
+import "./listItem.scss";
 
 export default function ListItem({index, item}) {
     const[isHovered, setIsHovered] = useState(false);
@@ -21,8 +17,8 @@ export default function ListItem({index, item}) {
         const res = await axios.get("/movies/" + item, {
           headers:{
             token: 
-             "Bearer " + getToken()
-          }
+             "Bearer " + getToken(),
+          },
         });
         setMovie(res.data);
       } catch (err) {
@@ -32,6 +28,8 @@ export default function ListItem({index, item}) {
     getMovie()
   },[item]);
 
+  if (!movie) return <></>;
+  
   return (
     <Link to={{pathname:"/watch", movie : movie}}>
     <div 

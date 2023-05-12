@@ -10,6 +10,9 @@ import { useSelector } from "react-redux";
 import { selectIsUserLogged } from "./store/login/loginSlice";
 import {getToken} from './storage/index';
 import MoviesList from "./pages/movies/MoviesList";
+import ListList from "./pages/lists/ListList";
+import UserList from "./pages/users/UserList";
+
 
 
 const App = () => {
@@ -51,10 +54,14 @@ const App = () => {
  
  <Route path="/watch" element={<Home type="watch"/>}/> 
 
- <Route path="/new-movie" element={<New/>}/> 
- <Route path="/movies-list" element={<MoviesList/>}>
-    {/* <Route path="/moive-list" element={<New/>}/> */}
-  </Route> 
+ <Route path="/new-movie" element={ <New/> }/> 
+ <Route path="/movies-list" element={ <MoviesList/> }/>
+
+
+  <Route path="/list-List" element={<ListList/>} />
+  
+
+  <Route path="/user-list" element={ <UserList/> } />
 
  </>
  : 

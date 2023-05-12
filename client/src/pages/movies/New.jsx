@@ -5,17 +5,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { getToken } from '../../storage/';
-import './movie.scss'
+import './newMovie.scss'
 
 
-const Home = () => {
+const Home = (props) => {
   
-    const [movie, setMovie] = useState({});
+    const [movie, setMovie] = useState(props.movie || {});
     const [error, setError] = useState('');
     
     const [errorTitle, setErrorTitle] = useState('');
     
     const [submited, setSubmited] = useState();
+
     const onChange = (value, fieldName) => {
         const newObj = {};
         newObj[fieldName] = value;
@@ -24,11 +25,11 @@ const Home = () => {
 
     const [lists, setLists] = useState([]);
 
-  useEffect(()=>{
+   useEffect(()=>{
     const getRandomLists = async()=>{
       try {
         const res = await axios.get(
-          `/lists`,
+          "/lists",
           {
             headers:{
               token: 
@@ -45,26 +46,30 @@ const Home = () => {
   }, []);
 
     const handleSubmit = () => {
-        if (
-            !movie.title ||
-            !movie.desc ||
-            !movie.img ||
-            !movie.imgSm ||
-            !movie.imgTitle ||
-            !movie.trailer ||
-            !movie.video ||
-            !movie.year ||
-            !movie.limit ||
-            !movie.genre ||
-            !movie.isSeries ||
-            !movie.list
+        // if (
+        //     !movie.title ||
+        //     !movie.desc ||
+        //     !movie.img ||
+        //     !movie.imgSm ||
+        //     !movie.imgTitle ||
+        //     !movie.trailer ||
+        //     !movie.video ||
+        //     !movie.year ||
+        //     !movie.limit ||
+        //     !movie.genre ||
+        //     !movie.isSeries ||
+        //     !movie.list
 
-        ) {
-            setError('Title, Description, Image URL, Small Image URL, Trailer URL, Video URL, Year, Limit +, Genre, Is Serie, List are required!')
-            return ;
-        }
+        // ) {
+        //     setError('Title, Description, Image URL, Small Image URL, Trailer URL, Video URL, Year, Limit +, Genre, Is Serie, List are required!')
+        //     return ;
+        // }
 
         setError(''); 
+        if (props.isUpdate) {
+          props.onSave(movie);
+          return;
+        }
 
             axios.post(
               `/movies`,
@@ -181,7 +186,6 @@ const Home = () => {
 
         <div className="form-item">
             <button onClick={handleSubmit} type='submit'>Submit</button>
-       
         </div>
         </div>
     </div>

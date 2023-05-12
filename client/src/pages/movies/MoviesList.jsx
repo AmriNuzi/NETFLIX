@@ -8,10 +8,12 @@ import New from "./New.jsx";
 
 
 
-const MoviesList = (props) => { 
+
+const MoviesList = () => { 
 
     const [moviesList, setMoviesList] = useState([])
     const [ createNew, setCreateNew ] = useState(false)
+    const [ currentMovie, setCurrentMovie] = useState()
 
     const handleOnSave=()=>{
         setCreateNew(false)
@@ -25,7 +27,7 @@ const MoviesList = (props) => {
     const getAllMovies = async() =>{
         try {
             const res = await axios.get(
-              "/movies",
+              `/movies/`,
               {
                 headers:{
                   token: 
@@ -43,7 +45,7 @@ const MoviesList = (props) => {
     const deleteMovie = async(id)=>{
         try {
             const res = await axios.delete(
-              `/movies${id}`,
+              `/movies/${id}`,
               {
                 headers:{
                   token: 
@@ -51,26 +53,29 @@ const MoviesList = (props) => {
                 },
               }
             );
-            getAllMovies()
+
+            getAllMovies();
+            // window.location.reload()
           } catch (err) {
             console.log(err);
           }
     }
 
-
     //edito nje film
-    const editMovie =async (id, movie)=>{
-        try {
+    const editMovie = async (movie)=>{
+      const id = movie._id;  
+      try {
             const res = await axios.put(
-              `/movies${id}`,
+              `/movies/${id}`,
+              movie,
               {
                 headers:{
                   token: "Bearer " + getToken(),
-                  body: JSON.stringify(movie)
                 },
               }
             );
-            getAllMovies()
+            getAllMovies();
+            setCurrentMovie(undefined);
           } catch (err) {
             console.log(err);
           }
@@ -82,35 +87,42 @@ const MoviesList = (props) => {
     },[])
 
 
-    console.log(" DATA", moviesList)
+    // console.log(" DATA", moviesList)
 
 
-    return(
+  return(
 <>
 <Navbar/>
 <div className='home' >
-
-    
       <div className='movie-list' >
+        {
+         currentMovie &&  <New isUpdate={true} movie={currentMovie} onSave={editMovie} />
+        }
         {
           createNew ? <New onSave={handleOnSave} />
           :(
-            <Button onClick={handleCreateNew} >Create New</Button>
+            <Button onClick={handleCreateNew} >Create New Movie</Button>
           )
         }
       <div>
         
-      </div>          
+      </div>    
+          <span style={{color:'white',
+                        fontSize:'30px' ,
+                        fontFamily:'bold'
+                        }}>List of movies</span>
+
+                       <br/>  
                 {moviesList.map((item, index)=>{
                     return( 
+                      
                         <p className='text' key={index}>{item.title}{item.desc}
-                        <Button onClick={() =>props.deleteMovie()}>delete</Button>
+                        <Button onClick={() => setCurrentMovie(item)}>Edit</Button>
+                        <Button onClick={() => deleteMovie(item._id)}>Delete</Button>
                         </p>
                     )
                 })}
-
             </div>
-            
         </div>
 </>
     )

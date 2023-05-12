@@ -3,6 +3,22 @@ const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const verify = require("../verifyToken");
 
+
+//Create
+router.post("/", verify, async (req, res)=>{
+  if(req.user.isAdmin){
+    const newUser = new User(req.body);
+  try {
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (err) {
+    res.status(500).json(err)
+  }
+ } else{
+  res.status(403).json("you are not allowed user")
+ }
+});
+
 //UPDATE
 
 router.put("/:id", verify, async (req, res) => {

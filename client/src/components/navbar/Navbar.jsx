@@ -55,16 +55,21 @@ const Navbar = () => {
                <Link to="/movies-list" className="link">
                 <span>Movie</span>
                </Link>
-               {/* <span>New and Popular</span>
-               <span>My List</span> */}
+               <Link to="/list-List" className="link">
+                <span>List</span>
+               </Link>
+               <Link to="/user-list" className="link">
+                <span>User</span>
+               </Link>
+
           </div>
 
      
 
           <div className="right">
             <Search className="icon"/>
-            <span>KID</span>
-            <Notifications/>
+            {/* <span>KID</span> */}
+            {/* <Notifications/> */}
             <img src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" 
             />
             <div className="profile">
